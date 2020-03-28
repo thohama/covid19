@@ -89,6 +89,7 @@
           <table class="table table-striped table-bordered table-hover dataTables-client" id="mytabel" style="width: 100%">
             <thead>
               <tr>
+                <th class="text-center">No</th>
                 <th class="text-center">Negara</th>
                 <th class="text-center">Confirmed</th>
                 <th class="text-center">Death</th>
@@ -128,7 +129,7 @@
   $(document).ready(function(){
 
 
-    $('#mytabel').DataTable({
+    var t = $('#mytabel').DataTable({
       "paging": true,
       "lengthChange": true,
       "searching": true,
@@ -142,16 +143,26 @@
         "url" :  '{{ url('/setup/corona/tabel') }}',
         "type": "GET"
       },
-      "columnDefs": [
-      {"className": "dt-center", "targets": "_all"}
-      ],
+      "columnDefs": [ {
+            "searchable": false,
+            "orderable": false,
+            "targets": 0
+        } ],
       "columns": [
+      { "defaultContent": "" },
       { "data": "attributes.Country_Region" },
       { "data": "attributes.Confirmed" },
       { "data": "attributes.Deaths" },
       { "data": "attributes.Recovered" },
-      ]
+      ],
+      "order": [[ 1, 'asc' ]],
     });
+
+    t.on( 'order.dt search.dt', function () {
+        t.column(0, {search:'applied', order:'applied'}).nodes().each( function (cell, i) {
+            cell.innerHTML = i+1;
+        } );
+    } ).draw();
 
     });// -x End Document get ready
 

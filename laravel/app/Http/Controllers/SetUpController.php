@@ -32,7 +32,19 @@ class SetUpController extends Controller
 
         $result2 = json_decode($result, true);
 
-        $result3 = array('data' => $result2);
+        $data = array();
+        foreach ($result2 as $r) {
+            $data[] = (array) $r;
+        }
+        $i=0;
+        foreach ($data as $key) {
+           $data[$i]['nomor'] = $i+1;
+
+            $i++;
+
+        }
+
+        $result3 = array('data' => $data);
 
         $result4 = json_encode($result3);
 
